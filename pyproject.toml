@@ -1,0 +1,41 @@
+[project]
+name = "joolz"
+version = "0.0.0"
+description = "Add a short description here"
+authors = [{name = "Joe-Stables-Climate-X", email = "163561848+Joe-Stables-Climate-X@users.noreply.github.com"}]
+requires-python = "== 3.11.9"
+dependencies = [
+    "beepy>=1.0.7,<2", 
+    # "countdown-cli>=1.0.3,<2"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+countdown = "tasker.__main__:main"
+
+# [tool.setuptools]
+# package-dir = { from = "src" }
+
+# [tool.setuptools.packages.find]
+# where = ["src"]
+# exclude = ["tasker.tests*"] 
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+joolz = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+polars = ">=1.5.0,<1.6"
+ipykernel = ">=6.29.5,<7"
+ipywidgets = ">=8.1.3,<9"
+pytest = ">=8.3.2,<9"
+click = ">=8.1.7,<9"
+loguru = ">=0.7.2,<0.8"

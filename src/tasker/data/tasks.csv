@@ -1,0 +1,15 @@
+id,task,completed,created
+0,mrm: write data section,true,2024-08-16T19:29:08.906054
+7,tasker: finish module,true,2024-08-16T20:50:01.792297
+8,tasker: write tests,true,2024-08-16T20:50:12.522915
+19,tests: write df test,true,2024-08-16T20:52:43.436016
+20,tests: write write test,true,2024-08-16T20:52:43.466658
+21,tests: write append test,true,2024-08-16T20:52:43.473777
+22,tests: write formatted test,true,2024-08-16T20:52:43.476642
+23,tests: write todo test,false,2024-08-16T20:52:43.479116
+24,tests: write delete test,true,2024-08-16T20:52:43.481461
+25,tests: write choice test,true,2024-08-16T20:52:43.483659
+26,tests: write _set test,true,2024-08-16T20:52:43.486034
+27,tests: write get test,true,2024-08-16T20:52:43.488187
+28,tests: write complete test,true,2024-08-16T20:52:43.490395
+29,test task,true,2024-08-16T21:24:07.921553
