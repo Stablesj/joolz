@@ -8,7 +8,6 @@ import time
 
 import click
 
-
 ENABLE_ALT_BUFFER = "\033[?1049h"
 DISABLE_ALT_BUFFER = "\033[?1049l"
 HIDE_CURSOR = "\033[?25l"

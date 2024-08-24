@@ -1,7 +1,6 @@
 # %%
 import pytest
 
-from tasker.tests import test_cmd_options
 from tasker.utils.cmd_options import CmdOptions
 
 
@@ -49,7 +48,7 @@ def test_cmd_options_methods(method, args, expected):
     if isinstance(result, CmdOptions):
         result = list(result)
 
-    assert type(result) == type(expected), f"Method: {method}"
+    assert type(result) is type(expected), f"Method: {method}"
     assert result == expected, f"Method: {method}"
 
 
