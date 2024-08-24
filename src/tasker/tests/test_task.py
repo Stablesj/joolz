@@ -1,9 +1,9 @@
 # %%
-import pytest
-from unittest.mock import patch
-import tasker
-from tasker import task
 from pathlib import Path
+
+import pytest
+
+from tasker import task
 
 cwd = Path(__file__).resolve().parent
 
@@ -34,11 +34,11 @@ def test_data_write(data_write):
 
 def test_data_append(data_write):
     Path(data_write.fp).unlink(missing_ok=True)
-    df = data_write.df
+    _ = data_write.df  # initialise dataframe
     _ = data_write.append("test task")
     assert data_write.df.shape == (1, 4)
     assert data_write.df["task"][0] == "test task"
-    assert data_write.df["completed"][0] == False
+    assert data_write.df["completed"][0] == False  # noqa: E712
     assert data_write.df["created"][0] == data_write.df["created"].max()
     Path(data_write.fp).unlink()  # cleanup
 
@@ -83,7 +83,7 @@ def test_data_complete(data_write):
     assert data_write.df.shape == (2, 4)
     _ = data_write.complete(0)
     assert data_write.df.shape == (2, 4)
-    assert data_write.get(0, "completed") == True
+    assert data_write.get(0, "completed") == True  # noqa: E712
     Path(data_write.fp).unlink(missing_ok=False)  # cleanup
 
 
