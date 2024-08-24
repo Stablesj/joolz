@@ -31,6 +31,7 @@ platforms = ["osx-arm64"]
 joolz = { path = ".", editable = true }
 
 [tool.pixi.tasks]
+test = "pytest"
 
 [tool.pixi.dependencies]
 polars = ">=1.5.0,<1.6"
