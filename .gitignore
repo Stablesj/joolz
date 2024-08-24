@@ -32,6 +32,6 @@ loss_modelling.egg-info/
 *.egg-info
 
 # loss_modelling
-output/ 
+output/
 cache/
 *_local.*

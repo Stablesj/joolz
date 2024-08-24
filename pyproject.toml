@@ -5,7 +5,7 @@ description = "Add a short description here"
 authors = [{name = "Joe-Stables-Climate-X", email = "163561848+Joe-Stables-Climate-X@users.noreply.github.com"}]
 requires-python = "== 3.11.9"
 dependencies = [
-    # "beepy>=1.0.7,<2", 
+    # "beepy>=1.0.7,<2",
     # "countdown-cli>=1.0.3,<2"
 ]
 
@@ -21,7 +21,7 @@ countdown = "tasker.__main__:main"
 
 # [tool.setuptools.packages.find]
 # where = ["src"]
-# exclude = ["tasker.tests*"] 
+# exclude = ["tasker.tests*"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
