@@ -99,8 +99,8 @@ class ValidateMeta(type):
 #         return repr(self.data)
 
 
-from collections import UserList
 from abc import abstractmethod
+from collections import UserList
 
 
 class ValidatedList(UserList):
@@ -238,7 +238,7 @@ if __name__ == "__main__":
             result = list(result)
 
         try:
-            assert type(result) == type(
+            assert type(result) is type(
                 expected
             ), f"Test {i}: {test[0]}, Expected {type(test[1])}, got {type(result)}"
         except AssertionError as e:
