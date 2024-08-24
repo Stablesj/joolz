@@ -26,9 +26,6 @@ def error_catch(func):
     return wrapper
 
 
-from functools import wraps
-
-
 def add_params(*options):
     """Add metadata to a function."""
 
@@ -46,9 +43,11 @@ def add_params(*options):
             The wrapped function with metadata.
         """
         # Update the _params attribute with the provided metadata
-        func._params = options  # _params are not exposed to the metadata as the function is then wrapped
+        func._params = (
+            options  # _params are not exposed to the metadata as the function is then wrapped
+        )
         # print(f"Adding metadata: {len(options)=} to {func.__name__}")
-        
+
         @wraps(func)  # Preserve function metadata
         def wrapped(*args, **kwargs):
             # print(f"Calling {func.__name__} with metadata: {func._params}")
@@ -98,7 +97,9 @@ class MetaCLI(type):
                     # Wrap the function with the parameter wrappers.
                     for option in params:
                         value = option(value)
-                    logger.debug(f"Added options {[opt.opts[0] for opt in value.__click_params__]} to {key}")
+                    logger.debug(
+                        f"Added options {[opt.opts[0] for opt in value.__click_params__]} to {key}"
+                    )
                 else:
                     logger.debug(f"No params found for {key}")
 

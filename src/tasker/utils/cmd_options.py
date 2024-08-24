@@ -178,7 +178,8 @@ class CmdOptions(ValidatedList):
     lst : list
         CmdOptions list to validate.
     """
-    def __init__(self, lst: list=None, **kwargs):
+
+    def __init__(self, lst: list = None, **kwargs):
         lst = lst or []
         initial_data = lst + [f"--{k}={v}" for k, v in kwargs.items()]
         super().__init__(initial_data)
