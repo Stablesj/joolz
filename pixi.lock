@@ -87,8 +87,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xz-5.2.6-h166bdaf_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zeromq-4.3.5-h75354e8_4.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.20.0-pyhd8ed1ab_0.conda
-      - pypi: https://files.pythonhosted.org/packages/7c/48/8f1c161e55677333ba3d5d5d3100a6b2b6c04cf542354e774766ff799b39/beepy-1.0.7-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/94/1b/4dc29653733202b68c09d9c6ca085cf67ac54859ee860647ef21ac1ff3dc/simpleaudio-1.0.4.tar.gz
       - pypi: .
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/appnope-0.1.4-pyhd8ed1ab_0.conda
@@ -164,8 +162,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/xz-5.2.6-h57fd34a_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zeromq-4.3.5-hcc0f68c_4.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.20.0-pyhd8ed1ab_0.conda
-      - pypi: https://files.pythonhosted.org/packages/7c/48/8f1c161e55677333ba3d5d5d3100a6b2b6c04cf542354e774766ff799b39/beepy-1.0.7-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/94/1b/4dc29653733202b68c09d9c6ca085cf67ac54859ee860647ef21ac1ff3dc/simpleaudio-1.0.4.tar.gz
       - pypi: .
 packages:
 - kind: conda
@@ -234,14 +230,6 @@ packages:
   - pkg:pypi/asttokens?source=hash-mapping
   size: 28922
   timestamp: 1698341257884
-- kind: pypi
-  name: beepy
-  version: 1.0.7
-  url: https://files.pythonhosted.org/packages/7c/48/8f1c161e55677333ba3d5d5d3100a6b2b6c04cf542354e774766ff799b39/beepy-1.0.7-py3-none-any.whl
-  sha256: 0e6616ad678fcf334e57c00633676ffef0ce1232127855fb2fc62c91e67ddb06
-  requires_dist:
-  - simpleaudio
-  requires_python: '>=3.0'
 - kind: conda
   name: bzip2
   version: 1.0.8
@@ -684,9 +672,7 @@ packages:
   name: joolz
   version: 0.0.0
   path: .
-  sha256: 2886926221d470fb0d63688a52a73020efe18826a3c0126714cce80110db9566
-  requires_dist:
-  - beepy>=1.0.7,<2
+  sha256: f2ad8b352bae8214cee5ac3b1318b697015834d0cada9df1c69136f8fd471b0f
   requires_python: ==3.11.9
   editable: true
 - kind: conda
@@ -1603,23 +1589,6 @@ packages:
   license: Apache-2.0
   license_family: APACHE
   purls:
-  - pkg:pypi/packaging?source=conda-forge-mapping
-  size: 50290
-  timestamp: 1718189540074
-- kind: conda
-  name: packaging
-  version: '24.1'
-  build: pyhd8ed1ab_0
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/packaging-24.1-pyhd8ed1ab_0.conda
-  sha256: 36aca948219e2c9fdd6d80728bcc657519e02f06c2703d8db3446aec67f51d81
-  md5: cbe1bb1f21567018ce595d9c2be0f0db
-  depends:
-  - python >=3.8
-  license: Apache-2.0
-  license_family: APACHE
-  purls:
   - pkg:pypi/packaging?source=hash-mapping
   size: 50290
   timestamp: 1718189540074
@@ -2071,11 +2040,6 @@ packages:
   purls: []
   size: 250351
   timestamp: 1679532511311
-- kind: pypi
-  name: simpleaudio
-  version: 1.0.4
-  url: https://files.pythonhosted.org/packages/94/1b/4dc29653733202b68c09d9c6ca085cf67ac54859ee860647ef21ac1ff3dc/simpleaudio-1.0.4.tar.gz
-  sha256: 691c88649243544db717e7edf6a9831df112104e1aefb5f6038a5d071e8cf41d
 - kind: conda
   name: six
   version: 1.16.0
@@ -2362,23 +2326,6 @@ packages:
   purls: []
   size: 298555
   timestamp: 1715607628741
-- kind: conda
-  name: zipp
-  version: 3.20.0
-  build: pyhd8ed1ab_0
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/zipp-3.20.0-pyhd8ed1ab_0.conda
-  sha256: 72fa72af24006e37a9f027d6d9f407369edcbd9bbb93db299820eb63ea07e404
-  md5: 05b6bcb391b5be17374f7ad0aeedc479
-  depends:
-  - python >=3.8
-  license: MIT
-  license_family: MIT
-  purls:
-  - pkg:pypi/zipp?source=compressed-mapping
-  size: 20857
-  timestamp: 1723591347715
 - kind: conda
   name: zipp
   version: 3.20.0
