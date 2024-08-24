@@ -169,7 +169,16 @@ class ValidatedList(UserList):
 
 
 class CmdOptions(ValidatedList):
-    def __init__(self, lst=None, **kwargs):
+    """
+    Ensures that all items in the list are in the form --k=v.
+    Creates this list from the kwargs.
+
+    Parameters
+    ----------
+    lst : list
+        CmdOptions list to validate.
+    """
+    def __init__(self, lst: list=None, **kwargs):
         lst = lst or []
         initial_data = lst + [f"--{k}={v}" for k, v in kwargs.items()]
         super().__init__(initial_data)

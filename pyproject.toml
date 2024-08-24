@@ -14,7 +14,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-countdown = "tasker.__main__:main"
+tasker = "tasker.__main__:main"
 
 # [tool.setuptools]
 # package-dir = { from = "src" }
