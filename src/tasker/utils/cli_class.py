@@ -3,6 +3,7 @@ from abc import abstractmethod
 from functools import wraps
 
 import click
+from loguru import logger
 
 
 def error_catch(func):
@@ -25,7 +26,10 @@ def error_catch(func):
     return wrapper
 
 
-def add_params(*meta_data):
+from functools import wraps
+
+
+def add_params(*options):
     """Add metadata to a function."""
 
     def decorator(func):
@@ -42,10 +46,9 @@ def add_params(*meta_data):
             The wrapped function with metadata.
         """
         # Update the _params attribute with the provided metadata
-        # _params are not exposed to the metadata as the function is then wrapped
-        func._params = meta_data
-        # print(f"Adding metadata: {len(meta_data)=} to {func.__name__}")
-
+        func._params = options  # _params are not exposed to the metadata as the function is then wrapped
+        # print(f"Adding metadata: {len(options)=} to {func.__name__}")
+        
         @wraps(func)  # Preserve function metadata
         def wrapped(*args, **kwargs):
             # print(f"Calling {func.__name__} with metadata: {func._params}")
@@ -56,7 +59,7 @@ def add_params(*meta_data):
         # assert not hasattr(
         #     func, "_params"
         # ), f"Function {func.__name__} already has _params."
-        # wrapped._params = meta_data
+        # wrapped._params = options
 
         # Preserve other function attributes if necessary
         # wrapped.__name__ = func.__name__
@@ -81,27 +84,23 @@ class MetaCLI(type):
                 commands.append(key)
 
                 # Check if the function has parameters before wrapping it
-                # if hasattr(value, "_params"):
-                #     params = value._params
-                # else:
-                #     params = None
-
                 params = getattr(value, "_params", None)
 
                 value = staticmethod(value)
 
                 # errors if trying to get _params here, after wrapping
 
-                value = error_catch(value)
+                if not dct.get("debug"):
+                    value = error_catch(value)
 
                 # check if the function has params to add
                 if params:
                     # Wrap the function with the parameter wrappers.
                     for option in params:
-                        print(f"Adding option: {option} to {key}")
                         value = option(value)
+                    logger.debug(f"Added options {[opt.opts[0] for opt in value.__click_params__]} to {key}")
                 else:
-                    print(f"No params found for {key}")
+                    logger.debug(f"No params found for {key}")
 
                 dct[key] = click.command(value)
 
