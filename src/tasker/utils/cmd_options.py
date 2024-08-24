@@ -1,4 +1,8 @@
 # %%
+from abc import abstractmethod
+from collections import UserList
+
+
 class ValidateMeta(type):
     def __new__(cls, name, bases, dct):
         # List of methods from list that should be wrapped
@@ -36,9 +40,7 @@ class ValidateMeta(type):
                     # Validate all data before performing the method
                     self._validate_all()
                     result = getattr(self.data, method_name)(*args, **kwargs)
-                    print(
-                        f"Method: {method_name}{args}, Result: {type(result)} {result}"
-                    )
+                    print(f"Method: {method_name}{args}, Result: {type(result)} {result}")
                     if method_name in ["__getitem__"]:
                         return result
                     elif isinstance(result, str):
@@ -97,10 +99,6 @@ class ValidateMeta(type):
 
 #     def __repr__(self) -> str:
 #         return repr(self.data)
-
-
-from collections import UserList
-from abc import abstractmethod
 
 
 class ValidatedList(UserList):
@@ -238,15 +236,13 @@ if __name__ == "__main__":
             result = list(result)
 
         try:
-            assert type(result) == type(
+            assert type(result) is type(
                 expected
             ), f"Test {i}: {test[0]}, Expected {type(test[1])}, got {type(result)}"
         except AssertionError as e:
             test_failures.append(e)
         try:
-            assert (
-                result == expected
-            ), f"Test {i}: {test[0]}, Expected {test[1]}, got {result}\n"
+            assert result == expected, f"Test {i}: {test[0]}, Expected {test[1]}, got {result}\n"
         except AssertionError as e:
             test_failures.append(e)
 

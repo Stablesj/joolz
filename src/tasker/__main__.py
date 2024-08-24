@@ -1,8 +1,8 @@
 # %%
 import click
-from tasker.countdown import countdown_cli
 
-from tasker.task import TaskCLI, clean_name
+from tasker.commands.task_cli import TaskCLI, clean_name
+from tasker.countdown import countdown_cli
 
 
 @click.group()

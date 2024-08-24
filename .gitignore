@@ -1,37 +1,15 @@
 .DS_Store
 *.tif
+*.csv
 # *alias
 */dask-scratch-space/*
 *.dirlock
 *.parquet
 *.pq
-*/datashader-examples/*
-development/costs/.vscode/*
-development/costs/modules/__pycache__/*
 __pycache__/
 *.pyc
 .vscode/
-# settings.json
-polars_tutorial/*
-development/costs/asset_testing/*.xlsx
-development/costs/asset_testing/*.csv
-# development/costs/asset_testing/FINAL_HK_CRE_2023_10_05_18_19_18_OUT.xlsx
-# development/costs/asset_testing/FINAL_HK_RRE_2023_10_05_18_20_36_OUT.xlsx
-development/costs/asset_testing/HSBC_HK_CRE.csv
-development/costs/buildings/*
-development/.vscode/settings.json
-development/costs/buildings/ref_gbr_premise_202311011205.csv
-development/costs/modules/__pycache__/Countries.cpython-311.pyc
-*.nc
-*.csv.gz
-NOAA_data/
-loss_modelling.egg-info/
 
 # pixi environments
 .pixi
 *.egg-info
-
-# loss_modelling
-output/ 
-cache/
-*_local.*
