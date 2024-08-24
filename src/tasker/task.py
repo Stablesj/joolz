@@ -1,17 +1,13 @@
 # %%
-from loguru import logger
 import subprocess
-import polars as pl
-from polars import col, lit
-from collections import UserDict, UserList
 from datetime import datetime
 from pathlib import Path
-from tasker.utils.cmd_options import CmdOptions
-from tasker.utils.helpers import pl_print
+
+import polars as pl
+from polars import col, lit
+
 from tasker.countdown import countdown
-from tasker.utils.cli_class import MetaCLI, add_params
-import click
-import re
+from tasker.utils.cmd_options import CmdOptions
 
 DF_FP = Path(__file__).parent / "data/tasks.csv"
 
@@ -49,9 +45,7 @@ class Data:
         return df
 
     def write(self, df: pl.DataFrame):
-        assert (
-            df.schema == df_schema
-        ), f"Schema mismatch: \nOld: {df_schema}\nNew: {df.schema}"
+        assert df.schema == df_schema, f"Schema mismatch: \nOld: {df_schema}\nNew: {df.schema}"
         df.sort("id").write_csv(self.fp)
 
     def append(self, task=None):
@@ -84,20 +78,18 @@ class Data:
     @staticmethod
     def formatted(df):
         return (
-            df.with_columns(
-                done=pl.when("completed").then(lit("✅")).otherwise(lit("❌"))
-            )
+            df.with_columns(done=pl.when("completed").then(lit("✅")).otherwise(lit("❌")))
             .with_row_index("index")
             .drop("completed")
         )
 
     @property
     def todo(self):
-        return self.df.filter(col("completed") == False)
+        return self.df.filter(not col("completed"))
 
     @property
     def done(self):
-        return self.df.filter(col("completed") == True)
+        return self.df.filter(col("completed"))
 
     def delete(self, id=None):
         df = self.df
@@ -133,10 +125,7 @@ class Data:
     def _set(self, id, column, value):
         df = self.df
         df = df.with_columns(
-            pl.when(col("id") == id)
-            .then(lit(value))
-            .otherwise(col(column))
-            .alias(column)
+            pl.when(col("id") == id).then(lit(value)).otherwise(col(column)).alias(column)
         )
         self.write(df)
 
@@ -182,75 +171,3 @@ def finish_work(id):
             print("Task not completed.")
         case _:
             print("Invalid input.")
-
-
-def clean_name(name):
-    return re.sub("_task[s]?", "", name)
-
-
-class TaskCLI(metaclass=MetaCLI):
-    def __init__(self) -> None:
-        # Create the Click group
-        self.cli = click.Group()
-
-        # Register commands
-        for command in self.commands:
-            self.cli.add_command(getattr(self, command), name=self.clean_name(command))
-
-    @staticmethod
-    def clean_name(name):
-        return re.sub("_task[s]?", "", name)
-
-    def run(self):
-        # Run the cli
-        self.cli()
-
-    def todo():
-        todo = data.todo
-        if len(todo) > 0:
-            print("There are tasks outstanding.")
-            id = data.choice(
-                data.todo,
-                "Input a number to continue the task, or press enter to make new task: ",
-            )
-            if id:
-                task = data.get(id, "task")
-            else:
-                id = data.append()
-
-            print("Task:", task)
-        else:
-            choice = input(
-                "No outstanding tasks found. Would you like to make a new task? (y/n): "
-            )
-            match choice:
-                case "y":
-                    id = data.append()
-                case "n":
-                    print("Exiting.")
-                case _:
-                    print("Invalid input.")
-
-        start_work(id)
-        finish_work(id)
-
-    def delete():
-        data.delete()
-
-    def new_tasks():
-        data.append()
-
-    @add_params(
-        click.option("--sort", default="created", help="Sort by column."),
-        click.option("--reverse", default=True, help="Reverse sort order."),
-    )
-    def list_tasks(sort, reverse):
-        pl_print(data.formatted(data.df).sort(sort, descending=reverse), drop=None)
-
-    def complete():
-        data.complete()
-
-
-if __name__ == "__main__":
-    cli = TaskCLI()
-    cli.run()
