@@ -25,7 +25,7 @@ countdown = "tasker.__main__:main"
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64"]
 
 [tool.pixi.pypi-dependencies]
 joolz = { path = ".", editable = true }
