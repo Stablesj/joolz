@@ -433,7 +433,7 @@ packages:
   name: joolz
   version: 0.0.0
   path: .
-  sha256: 8e06482d3442f45c370f6c919292a99d0508a8332e8c6e0e03cbba9497ad7621
+  sha256: 6d7c7d8ee07076824d68b1a59b40db62985cd7b7d50b9f1517369b95f12cdb24
   requires_dist:
   - beepy>=1.0.7,<2
   requires_python: ==3.11.9
