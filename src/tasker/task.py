@@ -1,16 +1,18 @@
 # %%
-from datetime import timedelta, datetime
-from pathlib import Path
-import subprocess
-import click
 import re
-from loguru import logger
+import subprocess
+from datetime import datetime, timedelta
+from pathlib import Path
+
+import click
 import polars as pl
+from loguru import logger
 from polars import col, lit
-from tasker.utils.cmd_options import CmdOptions
-from tasker.utils.helpers import pl_print, parse_timedelta_string, timedelta_to_string
+
 from tasker.countdown import countdown
 from tasker.utils.cli_class import MetaCLI, add_params
+from tasker.utils.cmd_options import CmdOptions
+from tasker.utils.helpers import parse_timedelta_string, timedelta_to_string
 
 # NOTE: temporary for update
 csv_fp = Path(__file__).parent / "data/tasks.csv"
@@ -19,17 +21,17 @@ if csv_fp.exists():
     assert not pq_fp.exists(), "Two versions of data/tasks found, delete one."
     logger.info("converting csv file to parquet")
     pl.read_csv(
-        csv_fp, 
+        csv_fp,
         schema={
             "id": pl.Int64,
             "task": pl.String,
             "completed": pl.Boolean,
-            "created": pl.Datetime("us")
-            }
-        ).write_parquet(pq_fp)
+            "created": pl.Datetime("us"),
+        },
+    ).write_parquet(pq_fp)
     logger.info("deleting csv file")
     csv_fp.unlink()
-    
+
 DF_FP = pq_fp
 
 df_schema = {
@@ -40,6 +42,7 @@ df_schema = {
     "worked": pl.Duration("us"),
 }
 
+
 def pl_print(df, string=False, drop=("id")):
     if drop is not None:
         df = df.drop(drop)
@@ -48,7 +51,7 @@ def pl_print(df, string=False, drop=("id")):
         col("worked").map_elements(timedelta_to_string, return_dtype=pl.String),
     )
     with pl.Config(
-        # tbl_hide_column_data_types=True, 
+        # tbl_hide_column_data_types=True,
         tbl_rows=20,
         tbl_hide_dataframe_shape=True,
     ):
@@ -67,20 +70,18 @@ class Data:
             df = pl.read_parquet(self.fp)
         except FileNotFoundError:
             df = pl.DataFrame(schema=df_schema)
-        
+
         # NOTE: temporary for update
-        if not "worked" in df.columns:
+        if "worked" not in df.columns:
             df = df.with_columns(worked=lit(None).cast(pl.Duration))
-        
+
         df = df.sort("created", descending=True)
         # df = df.with_row_index("id")
         assert df["id"].is_unique().all(), "Index column is not unique."
         return df
 
     def write(self, df: pl.DataFrame):
-        assert (
-            df.schema == df_schema
-        ), f"Schema mismatch: \nOld: {df_schema}\nNew: {df.schema}"
+        assert df.schema == df_schema, f"Schema mismatch: \nOld: {df_schema}\nNew: {df.schema}"
         df.sort("id").write_parquet(self.fp)
 
     def append(self, task=None):
@@ -98,13 +99,7 @@ class Data:
         new_id = max_id + 1
 
         new_row = pl.DataFrame(
-            [
-                [new_id],
-                [task],
-                [False],
-                [datetime.now()],
-                [timedelta(seconds=0)]
-            ],
+            [[new_id], [task], [False], [datetime.now()], [timedelta(seconds=0)]],
             schema=df_schema,
         )
         df = pl.concat([df, new_row], how="diagonal")
@@ -176,7 +171,7 @@ class Data:
             id = self.choice(self.todo, "Input task number to complete: ")
         self._set(id, "completed", completed)
 
-    def start_work(self, id:int, duration:str="60m"):
+    def start_work(self, id: int, duration: str = "60m"):
         expected_work = parse_timedelta_string(duration)
         worked = self.get(id, "worked") + expected_work
         self._set(id, "worked", worked)
@@ -186,7 +181,7 @@ class Data:
         countdown(duration, title=task)
         not_worked = expected_work - (start_time - datetime.now())
         self._set(id, "worked", worked - not_worked)
-        
+
     def finish_work(self, id):
         complete = input("Task complete? (y/n): ")
 
@@ -213,13 +208,14 @@ def sound_alert():
 
 data = Data()
 
+
 def clean_name(name):
     return re.sub("_task[s]?", "", name)
 
 
 class TaskCLI(metaclass=MetaCLI):
     debug = True
-    
+
     def __init__(self) -> None:
         # Create the Click group
         self.cli = click.Group()
@@ -251,9 +247,7 @@ class TaskCLI(metaclass=MetaCLI):
 
             print("Task:", task)
         else:
-            choice = input(
-                "No outstanding tasks found. Would you like to make a new task? (y/n): "
-            )
+            choice = input("No outstanding tasks found. Would you like to make a new task? (y/n): ")
             match choice:
                 case "y":
                     id = data.append()
@@ -284,7 +278,8 @@ class TaskCLI(metaclass=MetaCLI):
 
 if __name__ == "__main__":
     import sys
-    if not hasattr(sys, 'ps1'):
+
+    if not hasattr(sys, "ps1"):
         cli = TaskCLI()
         cli.run()
 
