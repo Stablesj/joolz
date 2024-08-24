@@ -1,6 +1,8 @@
 # %%
+from abc import abstractmethod
+from functools import wraps
+
 import click
-import loguru
 
 
 def error_catch(func):
@@ -13,6 +15,7 @@ def error_catch(func):
         The function to wrap.
     """
 
+    @wraps(func)  # needed so metadata is passed to click.command
     def wrapper(*args, **kwargs):
         try:
             func(*args, **kwargs)
@@ -20,9 +23,6 @@ def error_catch(func):
             print(f"Error: {e}")
 
     return wrapper
-
-
-from functools import wraps
 
 
 def add_params(*meta_data):
@@ -42,7 +42,8 @@ def add_params(*meta_data):
             The wrapped function with metadata.
         """
         # Update the _params attribute with the provided metadata
-        func._params = meta_data  # _params are not exposed to the metadata as the function is then wrapped
+        # _params are not exposed to the metadata as the function is then wrapped
+        func._params = meta_data
         # print(f"Adding metadata: {len(meta_data)=} to {func.__name__}")
 
         @wraps(func)  # Preserve function metadata
@@ -67,15 +68,17 @@ def add_params(*meta_data):
 
 
 class MetaCLI(type):
-    commands = []
     # List of methods that should not be added as commands
     not_commands = ["__init__", "cli", "run", "clean_name"]
 
     def __new__(cls, name, bases, dct):
+        # have to initialise it in __new__ to avoid sharing between instances of the class
+        commands = []
+
         for key, value in dct.items():
             # Loop through the methods in the class and add them as commands
             if callable(value) and key not in cls.not_commands:
-                cls.commands.append(key)
+                commands.append(key)
 
                 # Check if the function has parameters before wrapping it
                 # if hasattr(value, "_params"):
@@ -102,5 +105,42 @@ class MetaCLI(type):
 
                 dct[key] = click.command(value)
 
-        dct["commands"] = cls.commands
+        dct["commands"] = commands
         return super().__new__(cls, name, bases, dct)
+
+
+class CLI(metaclass=MetaCLI):
+    """CLI class for subclassing.
+
+    Attributes
+    __________
+    cli: click.Group
+        main cli call point for the group.
+    commands: list
+        list of all the commands to run
+
+    Methods
+    -------
+    run
+        calls the cli
+
+    clean_name
+        abstractmethod.
+        function to clean the command names for the cli.
+    """
+
+    def __init__(self) -> None:
+        # Create the Click group
+        self.cli = click.Group()
+
+        # Register commands
+        for command in self.commands:
+            self.cli.add_command(getattr(self, command), name=self.clean_name(command))
+
+    def run(self):
+        # Run the cli
+        self.cli()
+
+    @abstractmethod
+    def clean_name(self, command):
+        pass

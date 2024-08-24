@@ -1,7 +1,6 @@
 # %%
 import pytest
 
-from tasker.tests import test_cmd_options
 from tasker.utils.cmd_options import CmdOptions
 
 
@@ -49,7 +48,7 @@ def test_cmd_options_methods(method, args, expected):
     if isinstance(result, CmdOptions):
         result = list(result)
 
-    assert type(result) == type(expected), f"Method: {method}"
+    assert type(result) is type(expected), f"Method: {method}"
     assert result == expected, f"Method: {method}"
 
 
@@ -109,16 +108,14 @@ def test_cmd_options_methods(method, args, expected):
     ],
 )
 def test_cmd_options_methods2(command, expected):
-    say_options = CmdOptions(voice="Daniel", sound=10, beaver="ten more minutes")
+    say_options = CmdOptions(voice="Daniel", sound=10, beaver="ten more minutes")  # noqa: F841
 
     result = eval(command)
 
     if isinstance(result, CmdOptions):
         result = list(result)
 
-    assert (
-        result == expected
-    ), f"Test: {command}, \nExpected {expected}, \ngot {result}\n"
+    assert result == expected, f"Test: {command}, \nExpected {expected}, \ngot {result}\n"
 
 
 @pytest.mark.parametrize(
