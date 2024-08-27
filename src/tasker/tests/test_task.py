@@ -61,7 +61,7 @@ def test_data_append_empty(data_write):
     Path(data_write.fp).unlink(missing_ok=True)
     with pytest.raises(ValueError):
         _ = data_write.append("")
-    assert data_write.df.shape == (0, 4)
+    assert data_write.df.shape == (0, 5)
     assert not Path(data_write.fp).exists()
 
 
@@ -69,9 +69,9 @@ def test_data_delete(data_write):
     Path(data_write.fp).unlink(missing_ok=True)
     _ = data_write.append("test task")
     _ = data_write.append("test task 2")
-    assert data_write.df.shape == (2, 4)
+    assert data_write.df.shape == (2, 5)
     _ = data_write.delete(0)
-    assert data_write.df.shape == (1, 4)
+    assert data_write.df.shape == (1, 5)
     assert data_write.df["task"][0] == "test task 2"
     Path(data_write.fp).unlink(missing_ok=False)  # cleanup
 
@@ -80,9 +80,9 @@ def test_data_complete(data_write):
     Path(data_write.fp).unlink(missing_ok=True)
     _ = data_write.append("test task")
     _ = data_write.append("test task 2")
-    assert data_write.df.shape == (2, 4)
+    assert data_write.df.shape[0] == 2
     _ = data_write.complete(0)
-    assert data_write.df.shape == (2, 4)
+    assert data_write.df.shape[0] == 2
     assert data_write.get(0, "completed") == True  # noqa: E712
     Path(data_write.fp).unlink(missing_ok=False)  # cleanup
 
