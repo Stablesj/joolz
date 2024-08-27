@@ -36,7 +36,7 @@ def test_data_append(data_write):
     Path(data_write.fp).unlink(missing_ok=True)
     _ = data_write.df  # initialise dataframe
     _ = data_write.append("test task")
-    assert data_write.df.shape == (1, 4)
+    assert data_write.df.shape == (1, 5)
     assert data_write.df["task"][0] == "test task"
     assert data_write.df["completed"][0] == False  # noqa: E712
     assert data_write.df["created"][0] == data_write.df["created"].max()
