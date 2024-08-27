@@ -14,25 +14,7 @@ from tasker.utils.cli_class import MetaCLI, add_params
 from tasker.utils.cmd_options import CmdOptions
 from tasker.utils.helpers import parse_timedelta_string, timedelta_to_string
 
-# NOTE: temporary for update
-csv_fp = Path(__file__).parent / "data/tasks.csv"
-pq_fp = Path(__file__).parent / "data/tasks.parquet"
-if csv_fp.exists():
-    assert not pq_fp.exists(), "Two versions of data/tasks found, delete one."
-    logger.info("converting csv file to parquet")
-    pl.read_csv(
-        csv_fp,
-        schema={
-            "id": pl.Int64,
-            "task": pl.String,
-            "completed": pl.Boolean,
-            "created": pl.Datetime("us"),
-        },
-    ).write_parquet(pq_fp)
-    logger.info("deleting csv file")
-    csv_fp.unlink()
-
-DF_FP = pq_fp
+# %%
 
 df_schema = {
     "id": pl.Int64,
@@ -59,10 +41,43 @@ def pl_print(df, string=False, drop=("id")):
             return df.__repr__()
         print(df)
 
+def update_csv_parquet(csv_fp):
+    csv_fp = Path(csv_fp)
+    # NOTE: temporary for update
+    pq_fp = csv_fp.with_suffix(".parquet")
+    if csv_fp.exists():
+        assert not pq_fp.exists(), "Two versions of data/tasks found, delete one."
+        logger.info("converting csv file to parquet")
+        df = pl.read_csv(
+            csv_fp,
+            schema={
+                "id": pl.Int64,
+                "task": pl.String,
+                "completed": pl.Boolean,
+                "created": pl.Datetime("us"),
+            },
+        )
+        df.write_parquet(pq_fp)
+        df_pq = pl.read_parquet(pq_fp)
+        assert len(df_pq) == len(df), "Lengths are different"
+        logger.info("deleting csv file")
+        csv_fp.unlink()
+        return pq_fp
+    elif pq_fp.exists():
+        return pq_fp
+    else:
+        logger.warning(f"no csv or parquet exists, \n{csv_fp=}\n{pq_fp}")
+        return pq_fp
 
 class Data:
+    csv_fp = Path(__file__).parent / "data/tasks.csv"
+    DF_FP = update_csv_parquet(csv_fp)
+
     def __init__(self, fp=None) -> None:
-        self.fp = fp or DF_FP
+        if fp is None:
+            self.fp = self.DF_FP
+        else:
+            self.fp = update_csv_parquet(fp)
 
     @property
     def df(self):
@@ -283,4 +298,4 @@ if __name__ == "__main__":
         cli = TaskCLI()
         cli.run()
 
-# %%
+    Data("/Users/joestables/Documents/GitHub/joolz/src/tasker/tests/data/task_write.csv")
