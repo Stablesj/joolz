@@ -20,7 +20,7 @@ def data_write(fname="tasks_write.csv"):
 
 # write tests for the Data class
 def test_data_df(data):
-    assert data.df.shape[1] == 4
+    assert data.df.shape[1] == 5
     assert data.df.schema == task.df_schema
     assert data.df["id"].is_unique().all()
 
