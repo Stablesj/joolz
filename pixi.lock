@@ -670,9 +670,9 @@ packages:
   timestamp: 1696326218364
 - kind: pypi
   name: joolz
-  version: 0.0.0
+  version: 0.0.1
   path: .
-  sha256: 7e81a476fae146e3651576404299075e68ac74ea0823c473845617202d83aaae
+  sha256: 744752fde51dded480fac04d38dd9abd3fc615f2694b31bf1f453cd4617e7a2f
   requires_python: ==3.11.9
   editable: true
 - kind: conda
