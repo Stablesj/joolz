@@ -44,4 +44,5 @@ loguru = ">=0.7.2,<0.8"
 [tool.ruff]
 line-length = 100
 # pyflakes, pycodestyle, isort
+# "F", "E", "W",
 select = ["F", "E", "W", "I001"]

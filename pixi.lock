@@ -672,7 +672,7 @@ packages:
   name: joolz
   version: 0.0.0
   path: .
-  sha256: 2da6ead3077792570244e57ce2e79b003e933a5481d3333eecab6eb79d6c1da0
+  sha256: 7e81a476fae146e3651576404299075e68ac74ea0823c473845617202d83aaae
   requires_python: ==3.11.9
   editable: true
 - kind: conda
