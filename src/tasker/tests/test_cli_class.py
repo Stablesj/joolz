@@ -9,10 +9,10 @@ class FixtureCLI(CLI):
     @staticmethod
     def clean_name(x):
         return x.removesuffix("_bacon")
-    
+
     def add():
         print("running add command")
-    
+
     @add_params(
         click.option("--param1", default="new", type=int, help="parameter help")
     )
@@ -21,7 +21,7 @@ class FixtureCLI(CLI):
         New method added
         """
         print(f"command with params: {param1}")
-    
+
     def pancakes_bacon():
         """
         Help me I love bacon.
