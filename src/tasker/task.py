@@ -41,6 +41,7 @@ def pl_print(df, string=False, drop=("id")):
             return df.__repr__()
         print(df)
 
+
 def update_csv_parquet(csv_fp):
     csv_fp = Path(csv_fp)
     # NOTE: temporary for update
@@ -68,6 +69,7 @@ def update_csv_parquet(csv_fp):
     else:
         logger.warning(f"no csv or parquet exists, \n{csv_fp=}\n{pq_fp}")
         return pq_fp
+
 
 class Data:
     csv_fp = Path(__file__).parent / "data/tasks.csv"
@@ -188,14 +190,17 @@ class Data:
 
     def start_work(self, id: int, duration: str = "60m"):
         expected_work = parse_timedelta_string(duration)
-        print(expected_work)
-        worked = self.get(id, "worked") + expected_work
-        print(worked)
+        # handle missing values, set time worked to 0
+        if (current_val := self.get(id, "worked")) is None:
+            current_val = timedelta(0)
+        worked = current_val + expected_work
         self._set(id, "worked", worked)
 
         task = self.get(id, "task")
         start_time = datetime.now()
         countdown(duration, title=task)
+
+        # subtract the time not worked from the recorded time worked
         not_worked = expected_work - (datetime.now() - start_time)
         self._set(id, "worked", worked - not_worked)
 
