@@ -131,7 +131,7 @@ class Data:
 
     @property
     def todo(self):
-        return self.df.filter(not col("completed"))
+        return self.df.filter(~col("completed"))
 
     @property
     def done(self):
@@ -298,4 +298,7 @@ if __name__ == "__main__":
         cli = TaskCLI()
         cli.run()
 
-    Data("/Users/joestables/Documents/GitHub/joolz/src/tasker/tests/data/task_write.csv")
+# Data("/Users/joestables/Documents/GitHub/joolz/src/tasker/tests/data/task_write.csv")
+
+
+# %%
