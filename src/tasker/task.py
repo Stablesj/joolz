@@ -188,13 +188,15 @@ class Data:
 
     def start_work(self, id: int, duration: str = "60m"):
         expected_work = parse_timedelta_string(duration)
+        print(expected_work)
         worked = self.get(id, "worked") + expected_work
+        print(worked)
         self._set(id, "worked", worked)
 
         task = self.get(id, "task")
         start_time = datetime.now()
         countdown(duration, title=task)
-        not_worked = expected_work - (start_time - datetime.now())
+        not_worked = expected_work - (datetime.now() - start_time)
         self._set(id, "worked", worked - not_worked)
 
     def finish_work(self, id):
