@@ -33,9 +33,7 @@ class TaskCLI(CLI):
 
             print("Task:", task)
         else:
-            choice = input(
-                "No outstanding tasks found. Would you like to make a new task? (y/n): "
-            )
+            choice = input("No outstanding tasks found. Would you like to make a new task? (y/n): ")
             match choice:
                 case "y":
                     id = data.append()
