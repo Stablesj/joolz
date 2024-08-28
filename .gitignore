@@ -1,0 +1,15 @@
+.DS_Store
+*.tif
+*.csv
+# *alias
+*/dask-scratch-space/*
+*.dirlock
+*.parquet
+*.pq
+__pycache__/
+*.pyc
+.vscode/
+
+# pixi environments
+.pixi
+*.egg-info
